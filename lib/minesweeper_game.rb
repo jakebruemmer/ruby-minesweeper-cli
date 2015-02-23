@@ -27,6 +27,7 @@ class MinesweeperGame
       end
       puts
     end
+    
   end
 
   def play_the_game
