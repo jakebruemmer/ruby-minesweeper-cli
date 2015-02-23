@@ -13,11 +13,11 @@ while !rows.is_a?(Integer) do
   rows = gets.chomp.to_i
 end
 
-puts "Please enter the amount of rows that you would like to play with, anything more than 20 will be truncated."
+puts "Please enter the amount of cols that you would like to play with, anything more than 20 will be truncated."
 cols = gets.chomp.to_i
 
 while !cols.is_a?(Integer) do
-  puts "Please enter the amount of rows that you would like to play with, anything more than 20 will be truncated."
+  puts "Please enter the amount of cols that you would like to play with, anything more than 20 will be truncated."
   cols = gets.chomp.to_i
 end
 
