@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
-require_relative 'game_tile'
-require_relative 'minesweeper_game'
-require_relative 'game_board'
+require 'game_tile'
+require 'minesweeper_game'
+require 'game_board'
 
 puts "Welcome to the game of minesweeper!"
 puts "-----------------------------------"
