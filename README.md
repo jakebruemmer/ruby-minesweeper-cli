@@ -11,4 +11,4 @@ You can then run the command
 minesweeper
 ```
 
-provided that RubyGem has (been specified in your $PATH)[guides.rubygems.org/faqs/].
+provided that RubyGem has [been specified in your $PATH][guides.rubygems.org/faqs/].
