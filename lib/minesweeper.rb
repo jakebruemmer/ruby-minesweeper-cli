@@ -6,20 +6,24 @@ require 'game_board'
 puts "Welcome to the game of minesweeper!"
 puts "-----------------------------------"
 puts "Please enter the amount of rows that you would like to play with, anything more than 20 will be truncated."
-rows = gets.chomp.to_i
+rows = gets.chomp
 
-while !rows.is_a?(Integer) do
+while /^(\d){1,2}\z/.match(rows) == nil do
   puts "Please enter the amount of rows that you would like to play with, anything more than 20 will be truncated."
-  rows = gets.chomp.to_i
+  rows = gets.chomp
 end
+
+rows = rows.to_i
 
 puts "Please enter the amount of cols that you would like to play with, anything more than 20 will be truncated."
-cols = gets.chomp.to_i
+cols = gets.chomp
 
-while !cols.is_a?(Integer) do
+while /^(\d){1,2}\z/.match(cols) == nil do
   puts "Please enter the amount of cols that you would like to play with, anything more than 20 will be truncated."
-  cols = gets.chomp.to_i
+  cols = gets.chomp
 end
+
+cols = cols.to_i
 
 puts "Please enter the % chance you want for a bomb to occur"
 bomb_chance = gets.chomp.to_f
