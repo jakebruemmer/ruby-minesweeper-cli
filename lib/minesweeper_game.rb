@@ -33,25 +33,36 @@ class MinesweeperGame
   def play_the_game
     puts "Please put two numbers corresponding to the row and column that you'd like to play in the form"
     puts "<pf> <row>, <column>"
+    puts "Numbers greater than the number of rows or cols will be truncated to the max row/col"
     puts
     player_choice = gets.chomp
 
+    if /^(help|h)\z/.match(player_choice) then print_help_message end
+
     # Now match the player response with a regular expression
-    while /([pf]) (\d), (\d)$/.match(player_choice) == nil
+    while /^([pfPF]) (\d){1,2}, (\d){1,2}\z/.match(player_choice) == nil
       puts "Please put two numbers corresponding to the row and column that you'd like to play in the form"
       puts "<pf> <row>, <column>"
+      puts "Numbers greater than the number of rows or cols will be truncated to the max row/col"
       puts
       player_choice = gets.chomp
+      if /^(help|h)\z/.match(player_choice) then print_help_message end
     end
-    match = /([pf]) (\d), (\d)$/.match(player_choice)    
+    match = /^([pfPF]) (\d){1,2}, (\d){1,2}\z/.match(player_choice)
+    row = match[2].to_i
+    col = match[3].to_i
+
+    if row > @rows then row = @rows end
+    if col > @columns then col = @columns end
+
     # A 'p' character indicates that the player wants to "play" the tile.
     # An 'f' character indicates that the player would like to flag the
     # tile because they believe there to be a bomb there. Flagged tiles
     # may still be played after they have been flagged.
-    if match[1] == 'p'
-      play_tile(match[2].to_i - 1, match[3].to_i - 1)
-    elsif match[1] == 'f'
-      flag_tile(match[2].to_i - 1, match[3].to_i - 1)
+    if match[1] == 'p' || match[1] == 'P'
+      play_tile(row - 1, col - 1)
+    elsif match[1] == 'f' || match[1] == 'F'
+      flag_tile(row - 1, col - 1)
     end
     puts
     print_the_board
@@ -93,5 +104,30 @@ class MinesweeperGame
     @win
   end
   
+  private
+    def print_help_message
+      puts """ 
+      This is a command line port of the game of minesweeper. It's supposed to be like
+      the minesweeper game that comes standard with most operating systems, but the 
+      functionality is a little different because it's just command line based. In 
+      order to make a move you can just put in something like:
+
+      p 1, 2
+
+      where the coordinates are number starting at 1, 1 in the upper left corner to 
+      rows, cols for the number of rows and columns that you put in at the start of the
+      game. If you play something like:
+
+      f 1, 2
+
+      then that location will be flagged (|>) and marked as played. You can win the 
+      game while still having marked tiles. 
+
+      Good luck!
+      """
+      print_the_board
+    end
+
+
 end
 

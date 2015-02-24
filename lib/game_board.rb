@@ -1,6 +1,6 @@
 # GameBoard class will be used by the minesweeper game to keep track of tiles, 
 # bombs, and the conditions necessary to win the game.
-require 'game_tile'
+require_relative 'game_tile'
 
 class GameBoard
 
