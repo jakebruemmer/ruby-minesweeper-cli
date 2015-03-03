@@ -103,6 +103,20 @@ class MinesweeperGame
   def win?
     @win
   end
+
+  def print_ending_board
+    @rows.times do |row|
+      @columns.times do |col|
+        if @board.board["(#{row}, #{col})"].is_bomb? 
+          print "[ *] " 
+        else
+          print "[ " + @board.board["(#{row}, #{col})"].adjacent_bombs.to_s + "] "
+        end
+      end
+      puts
+    end
+  end
+
   
   private
     def print_help_message

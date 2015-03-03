@@ -1,40 +1,27 @@
 #!/usr/bin/env ruby
+$LOAD_PATH.unshift("#{File.dirname(__FILE__)}/")
 require 'game_tile'
 require 'minesweeper_game'
 require 'game_board'
+require 'minesweeper_parser'
 
 puts "Welcome to the game of minesweeper!"
-puts "-----------------------------------"
-puts "Please enter the amount of rows that you would like to play with, anything more than 20 will be truncated."
-rows = gets.chomp.to_i
 
-while !rows.is_a?(Integer) do
-  puts "Please enter the amount of rows that you would like to play with, anything more than 20 will be truncated."
-  rows = gets.chomp.to_i
+# Make the parser for parsing the data
+begin
+  options = MinesweeperParser.new.parse!(ARGV)
+rescue OptionParser::MissingArgument, OptionParser::InvalidArgument
+  help_msg = MinesweeperParser.parse!(["-h"])
+  puts help_msg
 end
 
-puts "Please enter the amount of cols that you would like to play with, anything more than 20 will be truncated."
-cols = gets.chomp.to_i
-
-while !cols.is_a?(Integer) do
-  puts "Please enter the amount of cols that you would like to play with, anything more than 20 will be truncated."
-  cols = gets.chomp.to_i
-end
-
-puts "Please enter the % chance you want for a bomb to occur"
-bomb_chance = gets.chomp.to_f
-
-while !bomb_chance.is_a?(Float) do
-  puts "Please enter the % chance you want for a bomb to occur"
-  bomb_chance = gets.chomp.to_f
-end
-
-# Create the board
-board = GameBoard.new(rows, cols, bomb_chance)
+# Create the board. We can now use the arguments that have been handled by the arguments 
+# parser class. The arguments have been stored in a hash in an OpenStruct object.
+board = GameBoard.new(options.rows_cols_chance[:rows], options.rows_cols_chance[:cols], options.rows_cols_chance[:bomb_chance])
 
 
 # Use the MinesweeperGame class to play the game
-game = MinesweeperGame.new(board, rows, cols)
+game = MinesweeperGame.new(board, options.rows_cols_chance[:rows], options.rows_cols_chance[:cols])
 
 game.print_the_board
 while !game.game_over? && !game.win? do
