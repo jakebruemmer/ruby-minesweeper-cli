@@ -20,7 +20,7 @@ class GameTile
     }
     @is_bomb = is_bomb
     @adjacent_bombs = 0
-    @adjacent_zeroes = {}
+    @adjacent_zeroes = []
     @been_played = false
     @been_flagged = false
     @board = board
@@ -45,22 +45,30 @@ class GameTile
   # This method will "play" all of the adjacent cells that have zero mines surrounding them.
   # The minesweeper game that comes standard with most computers has this behavior.
   def find_adjacent_zeroes
-    @adjacent.each do |key, value|
+    @adjacent.each do |key, tile|
       begin  
-        if value.adjacent_bombs == 0
-          @adjacent_zeroes[key] = value
+        if tile.adjacent_bombs == 0
+          @adjacent_zeroes << tile
         end
       rescue
       end
     end 
   end
   
-  def play_adjacent_zeroes
-    @adjacent_zeroes.each do |key, value|
-      value.adjacent_zeroes.each do |key1, value1|
-        if !value1.been_played  
-          value1.been_played = true
-          @board.num_played += 1
+  # Recusively play all of the zero tiles around the tile that has been played.
+  # The recursion stops when the method reaches a tile that has adjacent bombs.
+  def play_adjacent_zeroes(board)
+    if @adjacent_bombs > 0
+      @been_played = true
+      board.num_played += 1
+      return
+    else
+      board.num_played += 1 unless !@been_played
+      @been_played = true
+      @adjacent.each do |key, tile|
+        if !tile.nil? && !tile.been_played
+          tile.been_played = true
+          tile.play_adjacent_zeroes(board)
         end
       end
     end

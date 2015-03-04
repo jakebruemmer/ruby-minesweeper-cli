@@ -27,7 +27,6 @@ class MinesweeperGame
       end
       puts
     end
-    
   end
 
   def play_the_game
@@ -37,18 +36,18 @@ class MinesweeperGame
     puts
     player_choice = gets.chomp
 
-    if /^(help|h)\z/.match(player_choice) then print_help_message end
+    if /^(help|h)\z/.match(player_choice.downcase) then print_help_message end
 
     # Now match the player response with a regular expression
-    while /^([pfPF]) (\d){1,2}, (\d){1,2}\z/.match(player_choice) == nil
+    while /^([pfPF]) (\d{1,2}), (\d{1,2})\z/.match(player_choice) == nil
       puts "Please put two numbers corresponding to the row and column that you'd like to play in the form"
       puts "<pf> <row>, <column>"
       puts "Numbers greater than the number of rows or cols will be truncated to the max row/col"
       puts
       player_choice = gets.chomp
-      if /^(help|h)\z/.match(player_choice) then print_help_message end
+      if /^(help|h)\z/.match(player_choice.downcase) then print_help_message end
     end
-    match = /^([pfPF]) (\d){1,2}, (\d){1,2}\z/.match(player_choice)
+    match = /^([pfPF]) (\d{1,2}), (\d{1,2})\z/.match(player_choice)
     row = match[2].to_i
     col = match[3].to_i
 
@@ -72,15 +71,16 @@ class MinesweeperGame
     if @board.board["(#{row}, #{column})"].is_bomb?
       @game_over = true
     else
+      @board.num_played += 1 unless @board.board["(#{row}, #{column})"].been_played || @board.board["(#{row}, #{column})"].adjacent_bombs == 0
       @board.board["(#{row}, #{column})"].been_played = true
-      @board.num_played += 1
       if @board.board["(#{row}, #{column})"].adjacent_bombs == 0
-        @board.board["(#{row}, #{column})"].play_adjacent_zeroes
+        @board.board["(#{row}, #{column})"].play_adjacent_zeroes(@board)
       end
       if @board.num_played == @board.win_value
         @win = true
       end
     end
+    
   end
  
   def flag_tile(row, column)
@@ -88,8 +88,8 @@ class MinesweeperGame
       @board.board["(#{row}, #{column})"].been_flagged = false
     else
       @board.board["(#{row}, #{column})"].been_flagged = true
+      @board.num_played += 1 unless @board.board["(#{row}, #{column})"].been_played
       @board.board["(#{row}, #{column})"].been_played = true
-      @board.num_played += 1
       if @board.num_played == @board.win_value
         @win = true
       end

@@ -1,6 +1,5 @@
 # GameBoard class will be used by the minesweeper game to keep track of tiles, 
 # bombs, and the conditions necessary to win the game.
-$LOAD_PATH.unshift("#{File.dirname(__FILE__)}/")
 require 'game_tile'
 
 class GameBoard
@@ -16,7 +15,7 @@ class GameBoard
       cols.times do |column|
         if rand < bomb_chance
           @board["(#{row}, #{column})"] = GameTile.new(self, nil, nil, nil, nil, nil, nil, nil, nil, true)
-          @win_value -= 1
+          # @win_value -= 1
         else
           @board["(#{row}, #{column})"] = GameTile.new(self, nil, nil, nil, nil, nil, nil, nil, nil, false)
         end

@@ -11,7 +11,7 @@ puts "Welcome to the game of minesweeper!"
 begin
   options = MinesweeperParser.new.parse(ARGV)
 rescue OptionParser::MissingArgument, OptionParser::InvalidArgument
-  help_msg = MinesweeperParser.parse(["-h"])
+  help_msg = MinesweeperParser.new.parse(["-h"])
   puts help_msg
 end
 
